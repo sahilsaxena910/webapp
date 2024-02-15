@@ -1,7 +1,7 @@
 resource "aws_vpc" "main" {
   cidr_block = var.vpc_cidr_block
 
-  enable_dns_support = true
+  enable_dns_support   = true
   enable_dns_hostnames = true
 
   tags = {
@@ -25,9 +25,9 @@ resource "aws_subnet" "public" {
 resource "aws_subnet" "private" {
   count = length(var.private_subnet_cidr_blocks)
 
-  vpc_id                  = aws_vpc.main.id
-  cidr_block              = var.private_subnet_cidr_blocks[count.index]
-  availability_zone       = element(data.aws_availability_zones.available.names, count.index)
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = var.private_subnet_cidr_blocks[count.index]
+  availability_zone = element(data.aws_availability_zones.available.names, count.index)
 
   tags = {
     Name = "private-subnet-${count.index + 1}"
@@ -68,8 +68,8 @@ resource "aws_security_group" "lb" {
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]  
-}
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 
   ingress {
     from_port   = 20
@@ -78,7 +78,7 @@ resource "aws_security_group" "lb" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-egress {
+  egress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
@@ -94,16 +94,16 @@ resource "aws_security_group" "private_instance" {
   vpc_id = aws_vpc.main.id
 
   ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
+    from_port       = 80
+    to_port         = 80
+    protocol        = "tcp"
     security_groups = [aws_security_group.lb.id]
   }
 
   ingress {
-    from_port   = 20
-    to_port     = 20
-    protocol    = "tcp"
+    from_port       = 20
+    to_port         = 20
+    protocol        = "tcp"
     security_groups = [aws_security_group.lb.id]
   }
 
@@ -120,41 +120,41 @@ resource "aws_security_group" "private_instance" {
 }
 
 resource "aws_launch_template" "web_launch_template" {
-  name          = "web-launch-template"
-  image_id      = data.aws_ami.latest_amazon_linux.id
-  instance_type = "t2.micro"  
+  name                   = "web-launch-template"
+  image_id               = data.aws_ami.latest_amazon_linux.id
+  instance_type          = "t2.micro"
   vpc_security_group_ids = [aws_security_group.private_instance.id]
-  user_data = base64encode(file("${path.module}/user_data.sh"))  ## base64 encoding of user data script is required by aws
-  key_name = "ContainerKey"
+  user_data              = base64encode(file("${path.module}/user_data.sh")) ## base64 encoding of user data script is required by aws
+  key_name               = "ContainerKey"
   block_device_mappings {
-    device_name = "/dev/xvda"  # Root volume
+    device_name = "/dev/xvda" # Root volume
     ebs {
-      volume_size = 20  
+      volume_size = 20
     }
   }
 
   block_device_mappings {
-    device_name = "/dev/xvdf"  # Secondary volume for logs
+    device_name = "/dev/xvdf" # Secondary volume for logs
     ebs {
-      volume_size = 50  
+      volume_size = 50
     }
   }
 
 }
 
 resource "aws_autoscaling_group" "web_autoscaling_group" {
-  desired_capacity     = 0  
-  max_size             = 5  
-  min_size             = 0 
+  desired_capacity    = 0
+  max_size            = 5
+  min_size            = 0
   vpc_zone_identifier = aws_subnet.private[*].id
-  
+
   launch_template {
-    id = aws_launch_template.web_launch_template.id
+    id      = aws_launch_template.web_launch_template.id
     version = aws_launch_template.web_launch_template.latest_version
   }
 
-  health_check_type          = "EC2"
-  health_check_grace_period  = 300  
+  health_check_type         = "EC2"
+  health_check_grace_period = 300
 
   tag {
     key                 = "Name"
