@@ -64,14 +64,21 @@ resource "aws_route_table_association" "public" {
 resource "aws_security_group" "lb" {
   vpc_id = aws_vpc.main.id
 
-  dynamic "ingress" {
-    for_each = var.lb_ingress_ports
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]  
+}
+}
 
-    content {
-      from_port   = ingress.value
-      to_port     = ingress.value
-      protocol    = "tcp"
-      cidr_blocks = ["0.0.0.0/0"]
-    }
+resource "aws_security_group" "private_instance" {
+  vpc_id = aws_vpc.main.id
+
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    security_groups = [aws_security_group.lb.id]
   }
 }

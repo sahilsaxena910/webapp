@@ -13,7 +13,3 @@ variable "public_subnet_cidr_blocks" {
 variable "private_subnet_cidr_blocks" {
   description = "list of cidr block for private subnet(s). Enter more than one cidr if you want multiple cidr blocks"
 }
-variable "lb_ingress_ports" {
-  description = "port to open at loadbalancer level"
-  type = set(number)
-}
