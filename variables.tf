@@ -10,3 +10,6 @@ variable "vpc_name" {
 variable "public_subnet_cidr_blocks" {
   description = "list of cidr block for public subnet(s). Enter more than one cidr if you want multiple cidr blocks"
 }
+variable "private_subnet_cidr_blocks" {
+  description = "list of cidr block for private subnet(s). Enter more than one cidr if you want multiple cidr blocks"
+}
