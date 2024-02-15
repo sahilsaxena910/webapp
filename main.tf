@@ -70,6 +70,9 @@ resource "aws_security_group" "lb" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]  
 }
+  tags = {
+    Name = "alb-sg"
+  }
 }
 
 resource "aws_security_group" "private_instance" {
@@ -80,5 +83,9 @@ resource "aws_security_group" "private_instance" {
     to_port     = 80
     protocol    = "tcp"
     security_groups = [aws_security_group.lb.id]
+  }
+
+  tags = {
+    Name = "private-instance-sg"
   }
 }
