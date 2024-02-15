@@ -109,5 +109,26 @@ resource "aws_launch_template" "web_launch_template" {
   name          = "web-launch-template"
   image_id      = data.aws_ami.latest_amazon_linux.id
   instance_type = "t2.micro"  
-  security_group_names = [aws_security_group.private_instance.name]
+  vpc_security_group_ids = [aws_security_group.private_instance.id]
+}
+
+resource "aws_autoscaling_group" "web_autoscaling_group" {
+  desired_capacity     = 0  
+  max_size             = 5  
+  min_size             = 0 
+  vpc_zone_identifier = aws_subnet.private[*].id
+  
+  launch_template {
+    id = aws_launch_template.web_launch_template.id
+    version = aws_launch_template.web_launch_template.latest_version
+  }
+
+  health_check_type          = "EC2"
+  health_check_grace_period  = 300  
+
+  tag {
+    key                 = "Name"
+    value               = "web-instance"
+    propagate_at_launch = true
+  }
 }
