@@ -71,6 +71,13 @@ resource "aws_security_group" "lb" {
     cidr_blocks = ["0.0.0.0/0"]  
 }
 
+  ingress {
+    from_port   = 20
+    to_port     = 20
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
 egress {
     from_port   = 0
     to_port     = 0
@@ -93,6 +100,13 @@ resource "aws_security_group" "private_instance" {
     security_groups = [aws_security_group.lb.id]
   }
 
+  ingress {
+    from_port   = 20
+    to_port     = 20
+    protocol    = "tcp"
+    security_groups = [aws_security_group.lb.id]
+  }
+
   egress {
     from_port   = 0
     to_port     = 0
@@ -111,7 +125,7 @@ resource "aws_launch_template" "web_launch_template" {
   instance_type = "t2.micro"  
   vpc_security_group_ids = [aws_security_group.private_instance.id]
   user_data = base64encode(file("${path.module}/user_data.sh"))  ## base64 encoding of user data script is required by aws
-
+  key_name = "ContainerKey"
   block_device_mappings {
     device_name = "/dev/xvda"  # Root volume
     ebs {
