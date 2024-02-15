@@ -5,4 +5,5 @@ variable "vpc_cidr_block" {
 }
 variable "vpc_name" {
     description = "name of the vpc"
+    default = "web-app-vpc"
 }
