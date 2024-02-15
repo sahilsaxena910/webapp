@@ -1,0 +1,3 @@
+module "web-app" {
+  source = "../"
+}
