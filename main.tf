@@ -110,6 +110,7 @@ resource "aws_launch_template" "web_launch_template" {
   image_id      = data.aws_ami.latest_amazon_linux.id
   instance_type = "t2.micro"  
   vpc_security_group_ids = [aws_security_group.private_instance.id]
+  user_data = base64encode(file("${path.module}/user_data.sh"))  ## base64 encoding of user data script is required by aws
 
   block_device_mappings {
     device_name = "/dev/xvda"  # Root volume
@@ -124,6 +125,7 @@ resource "aws_launch_template" "web_launch_template" {
       volume_size = 50  
     }
   }
+
 }
 
 resource "aws_autoscaling_group" "web_autoscaling_group" {
