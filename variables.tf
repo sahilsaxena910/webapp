@@ -7,3 +7,6 @@ variable "vpc_name" {
     description = "name of the vpc"
     default = "web-app-vpc"
 }
+variable "public_subnet_cidr_blocks" {
+  description = "list of cidr block for public subnet(s). Enter more than one cidr if you want multiple cidr blocks"
+}
