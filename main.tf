@@ -110,6 +110,20 @@ resource "aws_launch_template" "web_launch_template" {
   image_id      = data.aws_ami.latest_amazon_linux.id
   instance_type = "t2.micro"  
   vpc_security_group_ids = [aws_security_group.private_instance.id]
+
+  block_device_mappings {
+    device_name = "/dev/xvda"  # Root volume
+    ebs {
+      volume_size = 20  
+    }
+  }
+
+  block_device_mappings {
+    device_name = "/dev/xvdf"  # Secondary volume for logs
+    ebs {
+      volume_size = 50  
+    }
+  }
 }
 
 resource "aws_autoscaling_group" "web_autoscaling_group" {
