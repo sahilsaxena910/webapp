@@ -60,3 +60,18 @@ resource "aws_route_table_association" "public" {
   subnet_id      = aws_subnet.public[count.index].id
   route_table_id = aws_route_table.public.id
 }
+
+resource "aws_security_group" "lb" {
+  vpc_id = aws_vpc.main.id
+
+  dynamic "ingress" {
+    for_each = var.lb_ingress_ports
+
+    content {
+      from_port   = ingress.value
+      to_port     = ingress.value
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+    }
+  }
+}
