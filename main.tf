@@ -136,7 +136,7 @@ resource "aws_launch_template" "web_launch_template" {
   block_device_mappings {
     device_name = "/dev/xvdf" # Secondary volume for logs
     ebs {
-      volume_size = 50
+      volume_size = 20
     }
   }
 
