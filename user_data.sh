@@ -6,9 +6,20 @@ mkdir /var/log/myapp
 mount /dev/xvdf /var/log/myapp
 echo '/dev/xvdf /var/log/myapp ext4 defaults,nofail 0 2' >> /etc/fstab
 
-# Install Nginx
-yum install nginx ansible git -y
+# Install neccessary tools
+yum install docker nginx ansible git -y
 
 # Start Nginx
 systemctl start nginx
-systemctl enable 
+systemctl enable nginx
+
+# Start Docker
+
+systemctl start docker
+systemctl enable docker
+
+mkdir /app
+cd /app
+git clone https://github.com/sahilsaxena910/simpleapp.git
+cd simpleapp
+ansible-playbook -i localhost, -c local web_app_config.yml
