@@ -1,0 +1,4 @@
+---
+- name: Configure Web Application
+  hosts: all
+  become: yes
