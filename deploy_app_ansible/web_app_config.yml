@@ -4,10 +4,10 @@
   become: yes
   tasks:
     - name: Copy HTML file to Nginx location
-        copy:
-          src: "/webapp/webapp/deploy_app_ansible/index.html"
-          dest: /var/www/html/index.html 
-        notify: Reload Nginx
+      copy:
+        src: "/webapp/webapp/deploy_app_ansible/index.html"
+        dest: /var/www/html/index.html 
+      notify: Reload Nginx
     
     - name: Reload Nginx
       service:
