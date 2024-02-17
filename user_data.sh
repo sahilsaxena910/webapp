@@ -7,11 +7,7 @@ mount /dev/xvdf /var/log/myapp
 echo '/dev/xvdf /var/log/myapp ext4 defaults,nofail 0 2' >> /etc/fstab
 
 # Install neccessary tools
-yum install docker nginx ansible git -y
-
-# Start Nginx
-systemctl start nginx
-systemctl enable nginx
+yum install docker ansible git -y
 
 # Start Docker
 
