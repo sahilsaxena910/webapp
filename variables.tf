@@ -14,6 +14,6 @@ variable "private_subnet_cidr_blocks" {
   description = "list of cidr block for private subnet(s). Enter more than one cidr if you want multiple cidr blocks"
 }
 variable "isDocker" {
-  type = bool
+  type    = bool
   default = false
 }

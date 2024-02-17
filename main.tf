@@ -124,13 +124,13 @@ resource "aws_launch_template" "web_launch_template" {
   image_id               = data.aws_ami.latest_amazon_linux.id
   instance_type          = "t2.micro"
   vpc_security_group_ids = [aws_security_group.private_instance.id]
-  user_data              = var.isDocker? base64encode(file("${path.module}/user_data.sh")): base64encode(file("${path.module}/user_data_ansible.sh")) ## base64 encoding of user data script is required by aws
+  user_data              = var.isDocker ? base64encode(file("${path.module}/user_data.sh")) : base64encode(file("${path.module}/user_data_ansible.sh")) ## base64 encoding of user data script is required by aws
   key_name               = "ContainerKey"
   block_device_mappings {
     device_name = "/dev/xvda" # Root volume
     ebs {
       volume_size = 20
-      encrypted = true
+      encrypted   = true
     }
   }
 
@@ -138,7 +138,7 @@ resource "aws_launch_template" "web_launch_template" {
     device_name = "/dev/xvdf" # Secondary volume for logs
     ebs {
       volume_size = 20
-      encrypted = true
+      encrypted   = true
     }
   }
 
