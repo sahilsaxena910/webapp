@@ -20,7 +20,9 @@ useradd -m -s /bin/bash siemens
 echo 'siemens ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 su siemens
 chown siemens:siemens /app
+
 cd /app
 git clone https://github.com/sahilsaxena910/simpleapp.git
 cd simpleapp
+
 ansible-playbook -i localhost, -c local deploy_web_app.yml
