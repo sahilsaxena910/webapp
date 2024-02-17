@@ -7,12 +7,8 @@ mount /dev/xvdf /var/log/myapp
 echo '/dev/xvdf /var/log/myapp ext4 defaults,nofail 0 2' >> /etc/fstab
 
 # Install Nginx
-yum install nginx -y
+yum install nginx ansible git -y
 
 # Start Nginx
 systemctl start nginx
 systemctl enable 
-
-## Install Ansible
-
-yum install ansible -y
