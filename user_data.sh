@@ -18,4 +18,4 @@ mkdir /app
 cd /app
 git clone https://github.com/sahilsaxena910/simpleapp.git
 cd simpleapp
-ansible-playbook -i localhost, -c local web_app_config.yml
+ansible-playbook -i localhost, -c local deploy_web_app.yml
