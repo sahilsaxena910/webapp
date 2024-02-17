@@ -15,6 +15,11 @@ systemctl start docker
 systemctl enable docker
 
 mkdir /app
+
+useradd -m -s /bin/bash siemens
+echo 'siemens ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+su siemens
+chown siemens:siemens /app
 cd /app
 git clone https://github.com/sahilsaxena910/simpleapp.git
 cd simpleapp
