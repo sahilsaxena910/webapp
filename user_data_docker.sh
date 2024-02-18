@@ -7,8 +7,8 @@ mount /dev/xvdf /var/log/myapp
 echo '/dev/xvdf /var/log/myapp ext4 defaults,nofail 0 2' >> /etc/fstab
 
 # Install neccessary tools
-yum install docker ansible git -y
-
+amazon-linux-extras install nginx1 epel -y
+yum install ansible git  -y
 # Start Docker
 
 systemctl start docker

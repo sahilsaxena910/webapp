@@ -54,6 +54,24 @@ resource "aws_route_table" "public" {
     Name = var.public_rt_name
   }
 }
+resource "aws_route_table" "private" {
+  vpc_id = aws_vpc.main.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_nat_gateway.nat_gw.id
+  }
+
+  tags = {
+    Name = "private-rt"
+  }
+}
+
+resource "aws_route_table_association" "private" {
+  count          = length(var.private_subnet_cidr_blocks)
+  subnet_id      = aws_subnet.private[count.index].id
+  route_table_id = aws_route_table.private.id
+}
 
 resource "aws_route_table_association" "public" {
   count          = length(var.public_subnet_cidr_blocks)
@@ -124,7 +142,7 @@ resource "aws_launch_template" "web_launch_template" {
   image_id               = data.aws_ami.latest_amazon_linux.id
   instance_type          = "t2.micro"
   vpc_security_group_ids = [aws_security_group.private_instance.id]
-  user_data              = var.isDocker ? base64encode(file("${path.module}/user_data.sh")) : base64encode(file("${path.module}/user_data_ansible.sh")) ## base64 encoding of user data script is required by aws
+  user_data              = var.isDocker ? base64encode(file("${path.module}/user_data_docker.sh")) : base64encode(file("${path.module}/user_data_ansible.sh")) ## base64 encoding of user data script is required by aws
   key_name               = "ContainerKey"
   block_device_mappings {
     device_name = "/dev/xvda" # Root volume
@@ -162,5 +180,33 @@ resource "aws_autoscaling_group" "web_autoscaling_group" {
     key                 = "Name"
     value               = "web-instance"
     propagate_at_launch = true
+  }
+}
+
+resource "aws_security_group" "nat_sg" {
+  vpc_id = aws_vpc.main.id
+  name   = "nat-security-group"
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "nat-security-group"
+  }
+}
+resource "aws_eip" "nat_eip" {
+  domain = "vpc" 
+  depends_on = [ aws_internet_gateway.igw ]
+}
+resource "aws_nat_gateway" "nat_gw" {
+  allocation_id = aws_eip.nat_eip.id
+  subnet_id     = aws_subnet.public[0].id # You can choose one of the public subnets for the NAT gateway
+
+  tags = {
+    Name = "nat-gateway"
   }
 }
