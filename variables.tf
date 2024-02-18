@@ -48,7 +48,11 @@ variable "ec2_sg_name" {
   description = "name of the security group attached to the ec2 provisioned by autoscaling group"
   default = "private-instance-sg"
 }
-
+variable "asg_name" {
+  type = string
+  description = "name of the security group attached to the ec2 provisioned by autoscaling group"
+  default = "web-app-asg"
+}
 variable "isDocker" {
   type    = bool
   default = false

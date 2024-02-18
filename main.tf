@@ -149,7 +149,7 @@ resource "aws_autoscaling_group" "web_autoscaling_group" {
   max_size            = var.asg_max_capacity
   min_size            = var.asg_min_capacity
   vpc_zone_identifier = aws_subnet.private[*].id
-
+  name = var.asg_name
   launch_template {
     id      = aws_launch_template.web_launch_template.id
     version = aws_launch_template.web_launch_template.latest_version
