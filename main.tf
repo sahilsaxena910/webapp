@@ -63,7 +63,7 @@ resource "aws_route_table_association" "public" {
 
 resource "aws_security_group" "lb" {
   vpc_id = aws_vpc.main.id
-
+  name = var.alb_sg_name
   ingress {
     from_port   = 80
     to_port     = 80
@@ -86,13 +86,13 @@ resource "aws_security_group" "lb" {
   }
 
   tags = {
-    Name = "alb-sg"
+    Name = var.alb_sg_name
   }
 }
 
 resource "aws_security_group" "private_instance" {
   vpc_id = aws_vpc.main.id
-
+  name = var.ec2_sg_name
   ingress {
     from_port       = 443
     to_port         = 443
@@ -115,7 +115,7 @@ resource "aws_security_group" "private_instance" {
   }
 
   tags = {
-    Name = "private-instance-sg"
+    Name = var.ec2_sg_name
   }
 }
 

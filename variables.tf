@@ -38,6 +38,17 @@ variable "public_rt_name" {
   description = "name of the public route table"
   default = "public-route-table"
 }
+variable "alb_sg_name" {
+  type = string
+  description = "name of the security group attached to the application load balancer"
+  default = "alb-sg"
+}
+variable "ec2_sg_name" {
+  type = string
+  description = "name of the security group attached to the ec2 provisioned by autoscaling group"
+  default = "private-instance-sg"
+}
+
 variable "isDocker" {
   type    = bool
   default = false
