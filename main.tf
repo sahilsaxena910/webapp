@@ -145,9 +145,9 @@ resource "aws_launch_template" "web_launch_template" {
 }
 
 resource "aws_autoscaling_group" "web_autoscaling_group" {
-  desired_capacity    = 0
-  max_size            = 5
-  min_size            = 0
+  desired_capacity    = var.asg_desired_capacity
+  max_size            = var.asg_max_capacity
+  min_size            = var.asg_min_capacity
   vpc_zone_identifier = aws_subnet.private[*].id
 
   launch_template {
