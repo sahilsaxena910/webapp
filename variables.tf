@@ -28,6 +28,16 @@ variable "ebs_root_volume_size" {
 variable "ebs_secondary_volume_size" {
   type = number
 }
+variable "igw_name" {
+  type = string
+  description = "name of the internet gatweway"
+  default = "web-app-igw" 
+}
+variable "public_rt_name" {
+  type = string
+  description = "name of the public route table"
+  default = "public-route-table"
+}
 variable "isDocker" {
   type    = bool
   default = false
