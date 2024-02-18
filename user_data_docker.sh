@@ -1,3 +1,5 @@
+####### Not working as of now, need to come back on it
+
 #!/bin/bash
 yum update -y
 
@@ -7,8 +9,10 @@ mount /dev/xvdf /var/log/myapp
 echo '/dev/xvdf /var/log/myapp ext4 defaults,nofail 0 2' >> /etc/fstab
 
 # Install neccessary tools
-amazon-linux-extras install nginx1 epel -y
-yum install ansible git  -y
+amazon-linux-extras install epel -y
+yum install ansible git docker python3 -y 
+export PATH=$PATH:/usr/bin
+pip3 install docker ## This particular library is needed by ansible to work with docker
 # Start Docker
 
 systemctl start docker
