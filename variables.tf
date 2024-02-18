@@ -22,6 +22,12 @@ variable "asg_min_capacity" {
 variable "asg_max_capacity" {
   type = number
 }
+variable "ebs_root_volume_size" {
+  type = number
+}
+variable "ebs_secondary_volume_size" {
+  type = number
+}
 variable "isDocker" {
   type    = bool
   default = false

@@ -5,4 +5,6 @@ module "web-app" {
   asg_desired_capacity = 0
   asg_min_capacity = 0
   asg_max_capacity = 0
+  ebs_root_volume_size = 20
+  ebs_secondary_volume_size = 20
 }

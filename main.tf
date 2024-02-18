@@ -129,7 +129,7 @@ resource "aws_launch_template" "web_launch_template" {
   block_device_mappings {
     device_name = "/dev/xvda" # Root volume
     ebs {
-      volume_size = 20
+      volume_size = var.ebs_root_volume_size
       encrypted   = true
     }
   }
@@ -137,7 +137,7 @@ resource "aws_launch_template" "web_launch_template" {
   block_device_mappings {
     device_name = "/dev/xvdf" # Secondary volume for logs
     ebs {
-      volume_size = 20
+      volume_size = var.ebs_secondary_volume_size
       encrypted   = true
     }
   }
