@@ -72,8 +72,8 @@ resource "aws_security_group" "lb" {
   }
 
   ingress {
-    from_port   = 20
-    to_port     = 20
+    from_port   = 443
+    to_port     = 443
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -94,8 +94,8 @@ resource "aws_security_group" "private_instance" {
   vpc_id = aws_vpc.main.id
 
   ingress {
-    from_port       = 80
-    to_port         = 80
+    from_port       = 443
+    to_port         = 443
     protocol        = "tcp"
     security_groups = [aws_security_group.lb.id]
   }
