@@ -117,10 +117,17 @@ resource "aws_security_group" "private_instance" {
     protocol        = "tcp"
     security_groups = [aws_security_group.lb.id]
   }
+  
+  ingress {
+    from_port       = 80
+    to_port         = 80
+    protocol        = "tcp"
+    security_groups = [aws_security_group.lb.id]
+  }
 
   ingress {
-    from_port       = 20
-    to_port         = 20
+    from_port       = 1
+    to_port         = 65535
     protocol        = "tcp"
     security_groups = [aws_security_group.lb.id]
   }
@@ -204,9 +211,61 @@ resource "aws_eip" "nat_eip" {
 }
 resource "aws_nat_gateway" "nat_gw" {
   allocation_id = aws_eip.nat_eip.id
-  subnet_id     = aws_subnet.public[0].id # You can choose one of the public subnets for the NAT gateway
+  subnet_id     = aws_subnet.public[0].id 
 
   tags = {
     Name = "nat-gateway"
   }
+}
+
+resource "aws_lb" "web_alb" {
+  name               = "web-alb"
+  internal           = false 
+  load_balancer_type = "application"
+  security_groups    = [aws_security_group.lb.id]
+
+  enable_deletion_protection = false 
+
+  subnets = aws_subnet.public[*].id
+
+  enable_http2               = true
+  enable_cross_zone_load_balancing = true
+}
+
+resource "aws_lb_target_group" "web_target_group" {
+  name     = "web-target-group"
+  port     = 80
+  protocol = "HTTP"
+  vpc_id   = aws_vpc.main.id
+
+  health_check {
+    path                = "/"
+    protocol            = "HTTP"
+    port                = 80
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+    timeout             = 3
+    interval            = 30
+  }
+
+  stickiness {
+    enabled = false
+    type    = "lb_cookie"
+  }
+}
+
+resource "aws_lb_listener" "web_alb_listener" {
+  load_balancer_arn = aws_lb.web_alb.arn
+  port              = 80
+  protocol          = "HTTP"
+
+  default_action {
+    target_group_arn = aws_lb_target_group.web_target_group.arn
+    type             = "forward"
+  }
+}
+
+resource "aws_autoscaling_attachment" "web_autoscaling_attachment" {
+  lb_target_group_arn  = aws_lb_target_group.web_target_group.arn
+  autoscaling_group_name = aws_autoscaling_group.web_autoscaling_group.name
 }
