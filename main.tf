@@ -347,7 +347,7 @@ resource "aws_autoscaling_policy" "add_capacity_policy" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "cpu_alarm_over" {
-  alarm_name          = "CPUUtilizationAlarm"
+  alarm_name          = "CPUUtilizationAlarmOver"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 2
   metric_name         = "CPUUtilization"
@@ -360,7 +360,7 @@ resource "aws_cloudwatch_metric_alarm" "cpu_alarm_over" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "cpu_alarm_under" {
-  alarm_name          = "CPUUtilizationAlarm"
+  alarm_name          = "CPUUtilizationAlarmUnder"
   comparison_operator = "LessThanThreshold"
   evaluation_periods  = 2
   metric_name         = "CPUUtilization"
