@@ -230,6 +230,7 @@ resource "aws_lb" "web_alb" {
 
   enable_http2               = true
   enable_cross_zone_load_balancing = true
+  
 }
 
 resource "aws_lb_target_group" "web_target_group" {
@@ -263,9 +264,70 @@ resource "aws_lb_listener" "web_alb_listener" {
     target_group_arn = aws_lb_target_group.web_target_group.arn
     type             = "forward"
   }
-}
 
+}
+resource "aws_lb_listener" "web_alb_listener_https" {
+  load_balancer_arn = aws_lb.web_alb.arn
+  port              = 443
+  protocol          = "HTTPS"
+
+  default_action {
+    target_group_arn = aws_lb_target_group.web_target_group.arn
+    type             = "forward"
+  }
+
+  ssl_policy       = "ELBSecurityPolicy-2016-08"
+  certificate_arn = aws_acm_certificate.self_signed_acm_cert.arn
+}
 resource "aws_autoscaling_attachment" "web_autoscaling_attachment" {
   lb_target_group_arn  = aws_lb_target_group.web_target_group.arn
   autoscaling_group_name = aws_autoscaling_group.web_autoscaling_group.name
 }
+
+resource "tls_private_key" "self_signed_cert" {
+  algorithm = "RSA"
+}
+
+# resource "tls_cert_request" "self_signed_cert_csr" {
+#   private_key_pem = tls_private_key.self_signed_cert.private_key_pem
+#   dns_names = ["test.example.com"]
+# }
+
+resource "tls_self_signed_cert" "self_signed_cert" {
+  private_key_pem = tls_private_key.self_signed_cert.private_key_pem
+  subject {
+    common_name  = "test.example.com"
+    organization = "Example Organization"
+  }
+
+  validity_period_hours = 8760 # 1 year
+  allowed_uses          = ["key_encipherment", "digital_signature", "server_auth"]
+}
+
+resource "aws_route53_zone" "private_zone" {
+  name                      = "example.com"
+  vpc {
+    vpc_id = aws_vpc.main.id
+  }
+  tags = {
+    Name = "private-hosted-zone"
+  }
+}
+
+resource "aws_route53_record" "alb_dns_record" {
+  zone_id = aws_route53_zone.private_zone.zone_id
+  name    = "test.example.com"
+  type    = "CNAME"
+  ttl     = "60"
+  records = [aws_lb.web_alb.dns_name]
+}
+
+resource "aws_acm_certificate" "self_signed_acm_cert" {
+  private_key        = tls_self_signed_cert.self_signed_cert.private_key_pem
+  certificate_body   = tls_self_signed_cert.self_signed_cert.cert_pem
+
+  tags = {
+    Name = "self-signed-certificate"
+  }
+}
+
