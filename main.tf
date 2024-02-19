@@ -170,9 +170,8 @@ resource "aws_launch_template" "web_launch_template" {
 }
 
 resource "aws_autoscaling_group" "web_autoscaling_group" {
-  desired_capacity    = var.asg_desired_capacity
   max_size            = var.asg_max_capacity
-  min_size            = var.asg_min_capacity
+  min_size            = 1
   vpc_zone_identifier = aws_subnet.private[*].id
   name = var.asg_name
   launch_template {
@@ -336,7 +335,6 @@ resource "aws_autoscaling_policy" "remove_capacity_policy" {
   scaling_adjustment    = -1
   cooldown              = 300
   adjustment_type       = "ChangeInCapacity"
-  estimated_instance_warmup = 300
   autoscaling_group_name = aws_autoscaling_group.web_autoscaling_group.name
 }
 
@@ -345,7 +343,6 @@ resource "aws_autoscaling_policy" "add_capacity_policy" {
   scaling_adjustment    = 1
   cooldown              = 300
   adjustment_type       = "ChangeInCapacity"
-  estimated_instance_warmup = 300
   autoscaling_group_name = aws_autoscaling_group.web_autoscaling_group.name
 }
 
