@@ -331,3 +331,49 @@ resource "aws_acm_certificate" "self_signed_acm_cert" {
   }
 }
 
+resource "aws_autoscaling_policy" "remove_capacity_policy" {
+  name                   = "RemoveCapacityPolicy"
+  scaling_adjustment    = -1
+  cooldown              = 300
+  adjustment_type       = "ChangeInCapacity"
+  estimated_instance_warmup = 300
+  autoscaling_group_name = aws_autoscaling_group.web_autoscaling_group.name
+}
+
+resource "aws_autoscaling_policy" "add_capacity_policy" {
+  name                   = "AddCapacityPolicy"
+  scaling_adjustment    = 1
+  cooldown              = 300
+  adjustment_type       = "ChangeInCapacity"
+  estimated_instance_warmup = 300
+  autoscaling_group_name = aws_autoscaling_group.web_autoscaling_group.name
+}
+
+resource "aws_cloudwatch_metric_alarm" "cpu_alarm_over" {
+  alarm_name          = "CPUUtilizationAlarm"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = 2
+  metric_name         = "CPUUtilization"
+  namespace           = "AWS/EC2"
+  period              = 300
+  statistic           = "Average"
+  threshold           = 80
+  alarm_description   = "Alarm when CPU exceeds 80%"
+  alarm_actions       = [aws_autoscaling_policy.add_capacity_policy.arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "cpu_alarm_under" {
+  alarm_name          = "CPUUtilizationAlarm"
+  comparison_operator = "LessThanThreshold"
+  evaluation_periods  = 2
+  metric_name         = "CPUUtilization"
+  namespace           = "AWS/EC2"
+  period              = 300
+  statistic           = "Average"
+  threshold           = 50
+  alarm_description   = "Alarm when CPU utilization is less than 50%"
+  alarm_actions       = [aws_autoscaling_policy.remove_capacity_policy.arn]
+}
+
+
+
