@@ -287,11 +287,6 @@ resource "tls_private_key" "self_signed_cert" {
   algorithm = "RSA"
 }
 
-# resource "tls_cert_request" "self_signed_cert_csr" {
-#   private_key_pem = tls_private_key.self_signed_cert.private_key_pem
-#   dns_names = ["test.example.com"]
-# }
-
 resource "tls_self_signed_cert" "self_signed_cert" {
   private_key_pem = tls_private_key.self_signed_cert.private_key_pem
   subject {
