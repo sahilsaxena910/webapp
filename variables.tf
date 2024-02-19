@@ -48,7 +48,3 @@ variable "asg_name" {
   description = "name of the security group attached to the ec2 provisioned by autoscaling group"
   default = "web-app-asg"
 }
-variable "isDocker" {
-  type    = bool
-  default = false
-}
