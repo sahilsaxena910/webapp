@@ -43,5 +43,5 @@ alb_dns_name: DNS name of the Application Load Balancer.
 Important Notes
 Ensure that necessary AWS credentials and permissions are set up before applying the Terraform configuration.
 The generated SSL certificate is self-signed and intended for testing purposes. For production use, consider using a valid SSL certificate from a Certificate Authority.
-
+This is a demo module and with the basic capabilities. It can be extended with various capabilities and can provide more flexibility to users to setup tags and other properties. However, for now it is limited.
 
