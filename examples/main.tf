@@ -5,4 +5,5 @@ module "web-app" {
   asg_max_capacity = 5
   ebs_root_volume_size = 20
   ebs_secondary_volume_size = 20
+  asg_health_check_grace_period = 300
 }
