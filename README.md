@@ -15,3 +15,6 @@ SSL Certificate: Generate a self-signed SSL certificate for HTTPS traffic.
 Nat Gateway: Allows outbound traffic to internet for instances launched in private subnet.
 
 For module usage please take a look at examples section
+
+Inputs
+

@@ -3,12 +3,15 @@ variable "vpc_cidr_block" {
   type        = string
 }
 variable "public_subnet_cidr_blocks" {
+  type = list(string)
   description = "list of cidr block for public subnet(s). Enter more than one cidr if you want multiple cidr blocks"
 }
 variable "private_subnet_cidr_blocks" {
+  type = list(string)
   description = "list of cidr block for private subnet(s). Enter more than one cidr if you want multiple cidr blocks"
 }
 variable "asg_max_capacity" {
+  description = "maximum capacity to set for autoscaling group"
   type = number
 }
 variable "ebs_root_volume_size" {
