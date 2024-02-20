@@ -24,6 +24,18 @@ Inputs
 . vpc_cidr_block (required): The CIDR block for the VPC.
 . public_subnet_cidr_blocks (required): List of CIDR blocks for public subnets.
 . private_subnet_cidr_blocks (required): List of CIDR blocks for private subnets.
+. asg_max_capacity: maximum capacity to set in autoscaling group.
+. ebs_root_volume_size: size in gb for ebs root volume
+. ebs_secondary_volume_size: size in gb for ebs secondary volume
+. vpc_name: Name of the vpc
+. igw_name: Name of the internet gateway
+. public_rt_name: Name of the public route table
+. alb_sg_name: Name of the application load balancer's security group
+. ec2_sg_name: Name of ec2 security group
+. asg_name: Name of the autoscaling group
+. ec2_instance_type: EC2 instance type
+. key_pair_name: Name of the key pair to login into EC2 instance
+. asg_health_check_grace_period: Health check grace period for asg in seconds
 
 Outputs
 alb_dns_name: DNS name of the Application Load Balancer.
