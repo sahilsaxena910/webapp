@@ -8,10 +8,6 @@ variable "public_subnet_cidr_blocks" {
 variable "private_subnet_cidr_blocks" {
   description = "list of cidr block for private subnet(s). Enter more than one cidr if you want multiple cidr blocks"
 }
-variable "vpc_name" {
-  description = "name of the vpc"
-  default     = "web-app-vpc"
-}
 variable "asg_max_capacity" {
   type = number
 }
@@ -20,6 +16,10 @@ variable "ebs_root_volume_size" {
 }
 variable "ebs_secondary_volume_size" {
   type = number
+}
+variable "vpc_name" {
+  description = "name of the vpc"
+  default     = "web-app-vpc"
 }
 variable "igw_name" {
   type = string
