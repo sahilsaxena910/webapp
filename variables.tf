@@ -13,7 +13,6 @@ variable "public_subnet_cidr_blocks" {
 variable "private_subnet_cidr_blocks" {
   description = "list of cidr block for private subnet(s). Enter more than one cidr if you want multiple cidr blocks"
 }
-
 variable "asg_max_capacity" {
   type = number
 }
@@ -57,4 +56,8 @@ variable "key_pair_name" {
   type = string
   default = null
   description = "key pair name to to login into ec2 instance"
+}
+variable "asg_health_check_grace_period" {
+  description = "Health check grace period for asg in seconds"
+  type = 300  
 }
