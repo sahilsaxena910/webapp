@@ -15,9 +15,11 @@ variable "asg_max_capacity" {
   type = number
 }
 variable "ebs_root_volume_size" {
+  description = "size in gb for ebs root volume"
   type = number
 }
 variable "ebs_secondary_volume_size" {
+  description = "size in gb for ebs secondary volume"
   type = number
 }
 variable "vpc_name" {
