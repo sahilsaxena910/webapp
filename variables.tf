@@ -48,3 +48,13 @@ variable "asg_name" {
   description = "name of the security group attached to the ec2 provisioned by autoscaling group"
   default = "web-app-asg"
 }
+variable "ec2_instance_type" {
+  type = string
+  description = "Instance type for ec2 instance"
+  default = "t2.micro"
+}
+variable "key_pair_name" {
+  type = string
+  default = null
+  description = "key pair name to to login into ec2 instance"
+}

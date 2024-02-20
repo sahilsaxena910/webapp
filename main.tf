@@ -147,10 +147,10 @@ resource "aws_security_group" "private_instance" {
 resource "aws_launch_template" "web_launch_template" {
   name                   = "web-launch-template"
   image_id               = data.aws_ami.latest_amazon_linux.id
-  instance_type          = "t2.micro"
+  instance_type          = var.ec2_instance_type 
   vpc_security_group_ids = [aws_security_group.private_instance.id]
   user_data              = base64encode(file("${path.module}/user_data_ansible.sh")) ## base64 encoding of user data script is required by aws
-  key_name               = "ContainerKey"
+  key_name               = var.key_pair_name
   block_device_mappings {
     device_name = "/dev/xvda" # Root volume
     ebs {
